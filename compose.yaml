@@ -1,4 +1,3 @@
-name: todo-app
 services:
   nginx:
     image: nginx:1.17
@@ -10,19 +9,13 @@ services:
       - backend
       - frontend
   frontend:
-    image: "node:22"
-    user: "node"
-    working_dir: /home/node/app
+    build: ./frontend
     environment:
       - NODE_ENV=development
       - WDS_SOCKET_PORT=0
-    volumes:
-      - ./frontend/:/home/node/app
-    expose:
-      - "3000"
     ports:
       - "3000:3000"
-    command: "npm start"
+
   backend:
     image: todo-app/backend
     build: ./backend
@@ -35,6 +28,4 @@ services:
     command: "python src/server.py"
     environment:
       - DEBUG=true
-    env_file:
-      - path: ./.env
-        required: true
+    env_file: "./.env"
